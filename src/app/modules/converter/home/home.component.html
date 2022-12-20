@@ -1,0 +1,89 @@
+<section>
+  <h3 class="header mb-5">Currency Exchanger</h3>
+  <alert></alert>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div class="row">
+
+      <div class="form-group col-md-4">
+        <label for="name"> Amount</label>
+        <input type="number" formControlName="amount" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['amount'].errors }" />
+        <div *ngIf="submitted && f['amount'].errors" class="invalid-feedback">
+          <div *ngIf="f['amount'].errors?.['required']">Enter Valid Amount</div>
+          <div *ngIf="f['amount'].errors?.['pattern']">Only numbers are allowed</div>
+        </div>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="name"> From</label>
+        <select formControlName="from" [attr.disabled]="f['amount'].errors " class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['from'].errors }">
+          <option value="EUR">EUR</option>
+
+          <option *ngFor="let symbol of Object.keys(Symbols || {})" value={{symbol}}>{{symbol}}</option>
+
+
+        </select>
+        <div *ngIf="submitted && f['from'].errors" class="invalid-feedback">
+          <div *ngIf="f['from'].errors?.['required']">From is required</div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        arrow
+      </div>
+      <div class="form-group col-md-3">
+        <label for="name"> To</label>
+        <select formControlName="to" [attr.disabled]="f['amount'].errors " class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['to'].errors }">
+          <option value="USD">USD</option>
+
+          <option *ngFor="let symbol of Object.keys(Symbols || {})" value={{symbol}}>{{symbol}}</option>
+
+
+
+        </select>
+        <div *ngIf="submitted && f['to'].errors" class="invalid-feedback">
+          <div *ngIf="f['to'].errors?.['required']">First Name is required</div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-md-8 offset-md-4 mt-4">
+      <button type="submit" [disabled]="form.invalid" class="btn btn-primary mr-1 form-control">Convert</button>
+
+    </div>
+  </form>
+  <div class="row mt-5" *ngIf="!loading">
+
+    <div class=" col-md-4 p-5">
+      1.00 {{result['query']?.from}} =
+      {{result['info']?.rate}}
+      {{result['query']?.to}}
+    </div>
+    <div class="col-md-4 result">
+      {{result['result']}} {{result['query']?.to}}
+    </div>
+
+    <div class="form-group col-md-4 p-5">
+      <button (click)="gotoDetails()" class="btn btn-primary mr-1 form-control">More Details</button>
+    </div>
+  </div>
+</section>
+<section>
+  <div class="row p-3">
+    <div class="col-md-4 " *ngFor="let rate of rates |keyvalue">
+      <div class="currency-tab ">
+        {{this.form.controls['amount'].value}} {{this.form.controls['from'].value}} =
+        {{this.form.controls['amount'].value * rate.value | number : '1.2-2'}} {{rate.key}}
+      </div>
+    </div>
+
+
+  </div>
+  <ul>
+    <!-- <li *ngFor="let item of int3 ">
+                {{item}}
+        </li> -->
+  </ul>
+</section>

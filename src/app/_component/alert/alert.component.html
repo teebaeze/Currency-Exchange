@@ -1,0 +1,6 @@
+<div *ngFor="let alert of alerts" class="alert-dismissible {{cssClass(alert)}}">
+    <span [innerHTML]="alert.message"></span>
+    <!-- <a class="close" (click)="removeAlert(alert)" style="cursor:pointer">&times;</a> -->
+    <button (click)="removeAlert(alert)"  type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+   
+</div>
