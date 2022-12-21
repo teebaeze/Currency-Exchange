@@ -20,14 +20,15 @@ export class HomeComponent implements OnInit {
   rates ={}
   loading = true;
   submitted = false;
-  Symbols!:any;
+  Symbols:any ={};
   Object = Object
   default: string = 'UK';
   viewValues:any
   push:any[]=[]
    int2!:any
    int3!:any
-   int4!:any[]
+   int4!:any[];
+   SymbolName!:string;
 
    dates:any[] = ["2022-01-31",
       "2022-02-28",
@@ -49,7 +50,7 @@ export class HomeComponent implements OnInit {
         this.Symbols = symbols
        },
        error: (e)=>{
-        // console.log(e.message,'errorrrr');
+    
         
         this.alertService.error(e.message)
       }
@@ -57,12 +58,13 @@ export class HomeComponent implements OnInit {
    
     
     this.form = this.fb.group({
-      amount: ['', [Validators.required,Validators.pattern("^[0-9]*$")]],
+      amount: [1, [Validators.required,Validators.pattern("^[0-9]*$")]],
       from: ['EUR',Validators.required],
       to: ['USD', Validators.required],
 
      
   });
+  this.onSubmit()
   //  this.getChartData()
   
   }
@@ -76,36 +78,24 @@ export class HomeComponent implements OnInit {
     console.log(name,'name')
   }
   onSubmit() {
-    // let fullName = this.Symbols.filter((x:any)=>(Object.keys(x))===this.form.value.from)
-    // console.log(fullName,'fullname');
+  
     this.getChartData() 
     
-    console.log(this.form)
-    let params ={
-      from:this.Object.values(this.form.value.from),
-      to: this.form.value.to,
-      amount: this.form.value.amount
-    }
-    console.log(params,'paramss');
     
     this.exchangeService.ConvertSymbols(this.form.value)
     .subscribe(
-    //   (res)=>{
-    //   this.loading = false;
-    //   console.log(res,'converted');
-    //   this.result = res
-      
-    // },
+
     {
       next:(res)=>{
         this.loading = false;
-          // console.log(res,'converted');
+         
           this.result = res
+        this.getSymbolName()
+        
 
       },
       error: (e)=>{
-        // console.log(e.message,'errorrrr');
-        
+    
         this.alertService.error(e.message)
       }
     }
@@ -114,17 +104,13 @@ export class HomeComponent implements OnInit {
     
     this.submitted = true;
 
-    // reset alerts on submit
-    // this.alertService.clear();
-// console.log(this.form);
-
-    // stop here if form is invalid
+  
     if (this.form.invalid) {
         return;
     }
 
     this.loading = true;
-    // this.updateUser()
+   
    
 }
 getLatestRates(){
@@ -144,7 +130,7 @@ gotoDetails(){
   
   
  
-  this.router.navigateByUrl('exchange/details',{state:{form: this.form.value, result: this.result, ChartData:this.int2}})
+  this.router.navigateByUrl('exchange/details',{state:{form: this.form.value, result: this.result, ChartData:this.int2, symbolName:this.SymbolName}})
 }
 
   getChartData() {
@@ -191,13 +177,12 @@ gotoDetails(){
 
         })
        
-        // t=> {console.log( t.rates)}
+   
         )
 
     
       );
 
-      // console.log('Result', newArray)
    
    
     forkJoin(todos).pipe(catchError(err => of(err))).subscribe(res => {
@@ -209,5 +194,11 @@ gotoDetails(){
       console.log(newArray, 'uuu')
       this.int2 = newArray
       
+  }
+  getSymbolName(){
+ this.SymbolName = this.Symbols[this.form.value.from]
+
+ 
+
   }
 }
