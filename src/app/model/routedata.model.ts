@@ -10,5 +10,6 @@ export class RouteData {
         };
     
         result?: Convert
+        symbolName?: string
     }
     

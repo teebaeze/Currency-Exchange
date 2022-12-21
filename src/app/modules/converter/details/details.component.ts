@@ -166,18 +166,24 @@ export class DetailsComponent implements OnInit,AfterViewInit {
   get f() { return this.form.controls; }
   onSubmit() {
     // console.log(this.form.value)
+  
     this.exchangeService.ConvertSymbols(this.form.value)
     .subscribe(
-      (res)=>{
-      this.loading = false;
-      // console.log(res,'converted');
-      this.result = res
-      
-    },(error)=>{
-      console.log(error);
-      
+
+    {
+      next:(res)=>{
+        this.loading = false;
+          // console.log(res,'converted');
+          this.result = res
+
+      },
+      error: (e)=>{
+        // console.log(e.message,'errorrrr');
+        
+        this.alertService.error(e.message)
+      }
     }
-    ),
+    )
    
     this.submitted = true;
 

@@ -1,6 +1,6 @@
 <section>
    <div class="d-flex justify-content-between mb-5">
-    <h3 class="header">Currency Exchanger</h3>
+    <h3 class="header" *ngIf="routedata.symbolName?.length!=0">{{routedata.form?.from}} - {{this.routedata.symbolName}}</h3>
      <alert></alert>
     <button (click)="goHome()" style="width: 150px; height: 50px; margin-top: 1.2rem;" class="btn btn-primary mr-1  form-control">Back to Home</button>
     </div>
